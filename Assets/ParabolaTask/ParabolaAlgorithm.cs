@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ParabolaAlgorithm : MonoBehaviour
 {
-    [SerializeField] Vector2 _startPoint, _middlePoint, _endPoint;
+    [SerializeField] Transform _startPoint, _middlePoint, _endPoint;
     [SerializeField] LineRenderer _lineRenderer;
-    [SerializeField] float _angle = 45f;
+    [SerializeField] float _angle = -60f;
 
-    const int _lineSize = 100;
+    //ëΩï™èIÇÌÇ¡ÇƒÇ»Ç¢ÇÃÇ≈ìríÜÇ‹Ç≈Ç≈Ç∑
 
     public void StartPoint()
     {
@@ -21,12 +21,21 @@ public class ParabolaAlgorithm : MonoBehaviour
     IEnumerator DrawingLines()
     {
         var b = Mathf.Tan(_angle * Mathf.Deg2Rad);
-        var a = (_endPoint.y - b * _endPoint.x) / (_endPoint.x * _endPoint.x);
+        var a = (_endPoint.position.y - b * _endPoint.position.x) / (_endPoint.position.x * _endPoint.position.x);
 
-        for (int x = 0; x <= _endPoint.x; x++)
+        int count = 0;
+
+        for (float x = _startPoint.position.x; x <= _endPoint.position.x; x++)
         {
             var y = a * x * x + b * x;
-            _lineRenderer.SetPosition(x, new Vector2(x, y));
+            _lineRenderer.SetPosition(count, new Vector3(x, y));
+
+            if(count == _endPoint.position.x / 2)
+            {
+                _middlePoint.position = _lineRenderer.GetPosition(count);
+            }
+
+            count++;
             yield return null;
         }
     }
@@ -34,6 +43,6 @@ public class ParabolaAlgorithm : MonoBehaviour
     void ResetPoint()
     {
         _lineRenderer.positionCount = 0;
-        _lineRenderer.positionCount = _lineSize;
+        _lineRenderer.positionCount = (int)(Mathf.Abs(_startPoint.position.x) + Mathf.Abs(_endPoint.position.x)) + 1;
     }
 }
