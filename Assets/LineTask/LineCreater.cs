@@ -7,6 +7,8 @@ public class LineCreater : MonoBehaviour
     Line _currentLine;
     [SerializeField] Line _linePrefab;
 
+    public Line CurrentLine { get => _currentLine;}
+
     private void Update()
     {
         if(Input.GetButton("Fire1"))
